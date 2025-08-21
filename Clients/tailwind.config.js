@@ -1,10 +1,28 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // NOTE: Update this to include the paths to all of your component files.
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        popinLight: ["popinLight"],
+        popinRegular: ["popinRegular"],
+        popinMedium: ["popinMedium"],
+        popinSemiBold: ["popinSemiBold"],
+        popinBold: ["popinBold"],
+        popinExtraBold: ["popinExtraBold"],
+        popinBlack: ["popinBlack"],
+        popinExtraLight: ["popinExtraLight"],
+        popinThin: ["popinThin"],
+        popinLightItalic: ["popinLightItalic"],
+        popinItalic: ["popinItalic"],
+        popinMediumItalic: ["popinMediumItalic"],
+        popinSemiBoldItalic: ["popinSemiBoldItalic"],
+        popinBoldItalic: ["popinBoldItalic"],
+        popinExtraBoldItalic: ["popinExtraBoldItalic"],
+        popinBlackItalic: ["popinBlackItalic"],
+      },
+    },
   },
   plugins: [],
 }

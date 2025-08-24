@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import 'react-native-reanimated';
 import '../global.css'
-import {useFonts} from 'expo-font';
+import { useFonts } from 'expo-font';
 export default function Layout() {
 
   const [fontsLoaded] = useFonts({
@@ -21,7 +21,7 @@ export default function Layout() {
     popinBoldItalic: require('../assets/fonts/Poppins-BoldItalic.ttf'),
     popinExtraBoldItalic: require('../assets/fonts/Poppins-ExtraBoldItalic.ttf'),
     popinBlackItalic: require('../assets/fonts/Poppins-BlackItalic.ttf'),
-    
+
   })
 
   if (!fontsLoaded) {
@@ -29,9 +29,10 @@ export default function Layout() {
   }
   return (
     <Stack initialRouteName="splash">
-      <Stack.Screen name="splash"  options={{ headerShown:false }} />
-      <Stack.Screen name="Login"  options={{ headerShown:false }} />
-      <Stack.Screen name="signup"  options={{ headerShown:false }} />
+      <Stack.Screen name="dashboard" options={{ headerShown: false }} />
+      <Stack.Screen name="splash" options={{ headerShown: false }} />
+      <Stack.Screen name="Login" options={{ headerShown: false }} />
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
     </Stack>
   );
 }

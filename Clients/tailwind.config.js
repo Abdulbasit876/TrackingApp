@@ -22,6 +22,11 @@ module.exports = {
         popinExtraBoldItalic: ["popinExtraBoldItalic"],
         popinBlackItalic: ["popinBlackItalic"],
       },
+      colors:{
+        primary:"#181A1C",
+        secondary:"#6656BD",
+        dark:"#0A0C0C"
+      }
     },
   },
   plugins: [],

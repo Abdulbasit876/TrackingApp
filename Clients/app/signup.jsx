@@ -27,7 +27,7 @@ export default function SignUpScreen() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{
         type: "timing",
-        duration: 600,
+        duration: 200,
       }}
       style={{ flex: 1 }}
     >

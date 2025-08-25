@@ -42,8 +42,8 @@ const Login = () => {
               translucent
               backgroundColor="transparent"
             />
-            <Text className="text-5xl h-14 font-popinMedium tracking-tight text-black mt-16 mb-10">
-              Login or sign up
+            <Text className="text-[35px] h-14 font-bold font-popinMedium tracking-tight text-black mt-16 mb-10">
+              Login or Sign-up
             </Text>
 
             <View className="rounded-xl border-gray-200 mb-6">
@@ -61,7 +61,7 @@ const Login = () => {
             {/* Login Button */}
             <TouchableOpacity
               className="bg-black p-4 rounded-xl mb-6"
-              onPress={() => router.push("/dashboard")} // 👈 navigation added here
+              onPress={() => router.push("/notification")} // 👈 navigation added here
             >
               <Text className="text-white text-[18px] text-center font-popinMedium">
                 Log in

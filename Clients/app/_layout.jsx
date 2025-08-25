@@ -28,8 +28,9 @@ export default function Layout() {
     return null;
   }
   return (
-    <Stack initialRouteName="splash">
-      <Stack.Screen name="dashboard" options={{ headerShown: false }} />
+    <Stack initialRouteName="splash" >
+      <Stack.Screen name="notification" options={{ headerShown: false }} />
+      <Stack.Screen name="setting" options={{ headerShown: false }} />
       <Stack.Screen name="splash" options={{ headerShown: false }} />
       <Stack.Screen name="Login" options={{ headerShown: false }} />
       <Stack.Screen name="signup" options={{ headerShown: false }} />

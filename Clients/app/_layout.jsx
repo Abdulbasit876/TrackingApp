@@ -1,9 +1,10 @@
-import { Stack } from "expo-router";
+import { Stack} from "expo-router";
 import 'react-native-reanimated';
-import '../global.css'
+import '../global.css';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
-export default function Layout() {
 
+export default function Layout() {
   const [fontsLoaded] = useFonts({
     popinLight: require('../assets/fonts/Poppins-Light.ttf'),
     popinRegular: require('../assets/fonts/Poppins-Regular.ttf'),
@@ -21,16 +22,15 @@ export default function Layout() {
     popinBoldItalic: require('../assets/fonts/Poppins-BoldItalic.ttf'),
     popinExtraBoldItalic: require('../assets/fonts/Poppins-ExtraBoldItalic.ttf'),
     popinBlackItalic: require('../assets/fonts/Poppins-BlackItalic.ttf'),
-
-  })
+  });
 
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <Stack initialRouteName="splash" >
-      <Stack.Screen name="notification" options={{ headerShown: false }} />
-      <Stack.Screen name="setting" options={{ headerShown: false }} />
+    <Stack initialRouteName="splash">
+      <Stack.Screen name="dashboard" options={{ headerShown: false }} />
       <Stack.Screen name="splash" options={{ headerShown: false }} />
       <Stack.Screen name="Login" options={{ headerShown: false }} />
       <Stack.Screen name="signup" options={{ headerShown: false }} />

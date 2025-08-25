@@ -25,6 +25,7 @@ const Login = () => {
         duration: 600,
       }}
       style={{ flex: 1 }}
+      className="mt-7"
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -61,14 +62,13 @@ const Login = () => {
             {/* Login Button */}
             <TouchableOpacity
               className="bg-black p-4 rounded-xl mb-6"
-              onPress={() => router.push("/notification")} // 👈 navigation added here
+              onPress={() => router.push("/task")} 
             >
               <Text className="text-white text-[18px] text-center font-popinMedium">
                 Log in
               </Text>
             </TouchableOpacity>
 
-            {/* OR Divider */}
             <View className="flex-row items-center mb-6">
               <View className="flex-1 h-[1px] bg-gray-300" />
               <Text className="mx-2 text-[18px] text-gray-500 font-popinMedium">
@@ -77,7 +77,6 @@ const Login = () => {
               <View className="flex-1 h-[1px] bg-gray-300" />
             </View>
 
-            {/* Google Button */}
             <TouchableOpacity className="flex-row items-center justify-center bg-white p-4 rounded-xl border border-gray-300 mb-6">
               <Image
                 source={require("../assets/images/googlelogo.png")}

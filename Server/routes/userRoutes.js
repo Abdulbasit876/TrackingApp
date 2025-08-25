@@ -1,7 +1,7 @@
 import UserController from "../controllers/userController.js";
 
 const userRoutes=(router)=>{
- router.get("/register", UserController.register);
+ router.post("/register", UserController.register);
 router.get("/login", UserController.login);
 router.get("/logout", UserController.logout);
 }

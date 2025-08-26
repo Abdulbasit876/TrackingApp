@@ -1,70 +1,133 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { MotiView } from 'moti';
-import { useRouter } from 'expo-router';
+// TaskDetailScreen.jsx
+import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+} from "react-native";
+import { MotiView } from "moti";
+import { useRouter } from "expo-router";
+import HeaderWithBack from "../../components/HeaderWithBack";
 
 export default function TaskDetailScreen() {
   const router = useRouter();
 
+  const handleComplete = () => console.log("Complete pressed");
+  const handleUpdate = () => console.log("Update pressed");
+  const handleDelete = () => console.log("Delete pressed");
+
   return (
-    <View className="flex-1 bg-[#0f0f0f] px-5 pt-14">
-      {/* Back Arrow */}
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text className="text-[#a78bfa] text-xl">{'←'}</Text>
-      </TouchableOpacity>
+    <SafeAreaView className="flex-1 bg-dark">
+      <StatusBar barStyle="light-content" />
+      <View className="flex-1 px-6 pt-5">
+      <HeaderWithBack/>
+       <Text
+  className="text-white text-4xl mb-2 font-popinMedium"
+  style={{ lineHeight: 42, includeFontPadding: false, textAlignVertical: "center" }}
+>
+  Plan budget for the new project
+</Text>
 
-      {/* Title */}
-      <Text className="text-white text-[28px] font-bold mt-4">Plan budget</Text>
+        <View className="mt-7">
+          {/* Description */}
+          <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
+            Description
+          </Text>
+          <Text className="text-[#d4d4d4] text-lg font-popinRegular mb-5">
+            Set up a budget plan for the upcoming project
+          </Text>
 
-      {/* Description */}
-      <Text className="text-[#a78bfa] uppercase text-xs mt-6">Description</Text>
-      <Text className="text-[#d4d4d4] text-base mt-1">
-        Set up a budget plan for the upcoming project
-      </Text>
+          {/* Priority */}
+          <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
+            Priority
+          </Text>
+          <Text className="text-[#fb923c] text-lg font-popinRegular mb-5">
+            High
+          </Text>
 
-      {/* Priority */}
-      <Text className="text-[#a78bfa] uppercase text-xs mt-6">Priority</Text>
-      <Text className="text-[#fb923c] text-base mt-1">High</Text>
+          {/* Due Date */}
+          <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
+            Due Date
+          </Text>
+          <Text className="text-[#d4d4d4] text-lg font-popinRegular mb-6">June 6</Text>
+        </View>
 
-      {/* Due Date */}
-      <Text className="text-[#a78bfa] uppercase text-xs mt-6">Due Date</Text>
-      <Text className="text-[#d4d4d4] text-base mt-1">June 6</Text>
+        {/* Spacer */}
+        <View className="flex-1" />
 
-      {/* Buttons */}
-      <View className="flex-row justify-between mt-12">
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 400 }}
-          className="flex-1 mr-2"
-        >
-          <TouchableOpacity className="bg-[#16a34a] py-3 rounded-lg active:opacity-80">
-            <Text className="text-white text-center font-semibold">Completed</Text>
-          </TouchableOpacity>
-        </MotiView>
+        {/* Buttons group */}
+        <View className={Platform.OS === "ios" ? "pb-[18px]" : "pb-[34px]"}>
+          <View className="flex-row justify-between mb-3">
+            {/* Completed */}
+            <MotiView
+              from={{ opacity: 0, translateY: 18 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: "timing", duration: 380 }}
+              className="flex-1 mr-2.5"
+            >
+              <TouchableOpacity
+                onPress={handleComplete}
+                activeOpacity={0.85}
+                className="bg-[#008660] py-3 rounded-xl items-center"
+              >
+                <Text className="text-white font-popinRegular text-base">
+                  Completed
+                </Text>
+              </TouchableOpacity>
+            </MotiView>
 
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 500 }}
-          className="flex-1 mx-2"
-        >
-          <TouchableOpacity className="bg-[#8b5cf6] py-3 rounded-lg active:opacity-80">
-            <Text className="text-white text-center font-semibold">Update</Text>
-          </TouchableOpacity>
-        </MotiView>
+            {/* Update */}
+            <MotiView
+              from={{ opacity: 0, translateY: 18 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: "timing", duration: 520 }}
+              className="flex-1 mx-1.5"
+            >
+              <TouchableOpacity
+                onPress={handleUpdate}
+                activeOpacity={0.85}
+                className="bg-[#6f57d8] py-3 rounded-xl items-center"
+              >
+                <Text className="text-white font-popinRegular text-base">Update</Text>
+              </TouchableOpacity>
+            </MotiView>
 
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 600 }}
-          className="flex-1 ml-2"
-        >
-          <TouchableOpacity className="bg-[#f97316] py-3 rounded-lg active:opacity-80">
-            <Text className="text-white text-center font-semibold">Delete</Text>
-          </TouchableOpacity>
-        </MotiView>
+            {/* Delete */}
+            <MotiView
+              from={{ opacity: 0, translateY: 18 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: "timing", duration: 680 }}
+              className="flex-1 ml-2.5"
+            >
+              <TouchableOpacity
+                onPress={handleDelete}
+                activeOpacity={0.85}
+                className="bg-[#fb923c] py-3 rounded-xl items-center"
+              >
+                <Text className="text-white font-popinRegular text-base">Delete</Text>
+              </TouchableOpacity>
+            </MotiView>
+          </View>
+
+          {/* Cancel */}
+          <MotiView
+            from={{ opacity: 0, translateY: 10 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ type: "timing", duration: 420 }}
+          >
+            <TouchableOpacity
+              onPress={() => router.back?.()}
+              activeOpacity={0.85}
+              className="bg-primary py-4 rounded-xl items-center"
+            >
+              <Text className="text-white font-popinRegular text-lg">Cancel</Text>
+            </TouchableOpacity>
+          </MotiView>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

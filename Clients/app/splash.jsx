@@ -12,7 +12,6 @@ const SplashScreen = () => {
     }, 3000);
     return () => clearTimeout(timer);
   }, [router]);
-
   return (
     <Animated.View
       style={styles.container}

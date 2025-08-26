@@ -17,7 +17,7 @@ const Barcard = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      activeOpacity={0.8} // 👈 thoda button effect aayega
+      activeOpacity={0.5} // 👈 thoda button effect aayega
       className="mt-4 bg-primary p-4 rounded-3xl"
     >
       <Text className="text-white text-xl font-popinMedium">{title}</Text>

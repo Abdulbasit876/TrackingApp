@@ -24,5 +24,3 @@ const Icon_button = ({
 };
 
 export default Icon_button;
-
-const styles = StyleSheet.create({});

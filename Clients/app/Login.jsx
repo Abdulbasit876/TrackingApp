@@ -13,7 +13,7 @@ import {
 import { MotiView } from "moti";
 import { useRouter } from "expo-router";
 
-export default  Login = () => {
+const Login = () => {
   const router = useRouter();
 
   return (
@@ -37,7 +37,7 @@ export default  Login = () => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-1 bg-light px-6 mt-8">
+          <View className="flex-1 bg-[#f3f2ef] px-6 mt-8">
             <StatusBar
               barStyle="dark-content"
               translucent
@@ -58,11 +58,9 @@ export default  Login = () => {
                 className="p-4 bg-white text-[18px] mb-6 font-popinMedium border border-gray-200 rounded-lg"
               />
             </View>
-
-            {/* Login Button */}
             <TouchableOpacity
               className="bg-black p-4 rounded-xl mb-6"
-              onPress={() => router.push("/task")} 
+              onPress={() => router.push("/update/1")} 
             >
               <Text className="text-white text-[18px] text-center font-popinMedium">
                 Log in
@@ -104,4 +102,4 @@ export default  Login = () => {
   );
 };
 
-
+export default Login;

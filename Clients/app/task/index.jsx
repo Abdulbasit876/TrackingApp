@@ -67,7 +67,7 @@ export default function TaskListScreen() {
 
       </View>
       <TouchableOpacity
-        onPress={() => setIsOpen(false)}
+        onPress={() => setIsOpen(false) || router.push("/addtask")}
         className="absolute bottom-6 right-6 bg-secondary p-4 rounded-full shadow-lg"
       >
         <MaterialIcons name="add" size={28} color="white" />

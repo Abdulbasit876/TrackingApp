@@ -38,7 +38,9 @@ export default function Layout() {
         <Stack.Screen name="settings" options={{ headerShown: false }} />
         <Stack.Screen name="notification" options={{ headerShown: false }} />
         <Stack.Screen name="insights" options={{ headerShown: false }} />
+        <Stack.Screen name="addtask" options={{ headerShown: false }} />
         <Stack.Screen name="task/taskDetail" options={{ headerShown: false }} />
+        <Stack.Screen name="update/[id]" options={{ headerShown: false }} />
       </Stack>
     </GestureHandlerRootView>
   );

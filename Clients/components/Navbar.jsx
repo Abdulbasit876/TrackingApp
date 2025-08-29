@@ -7,6 +7,9 @@ import {
   Modal,
   Pressable,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signOut } from "firebase/auth";
+import { auth } from "../config/firebase";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { MotiView } from "moti";
 import Icon_button from "./Icon_button";
@@ -23,6 +26,17 @@ const Navbar = ({ isOpen, toggleDrawer, handleNavigate }) => {
   const Navigate_to_Insights = () => {  
     handleNavigate("/insights");
   };
+    const Navigate_to_Login = async () => {
+  try {
+    await AsyncStorage.removeItem("user");
+    await signOut(auth);
+    handleNavigate("/Login");
+
+    console.log("Logout successful!");
+  } catch (error) {
+    console.error("Logout error: ", error);
+  }
+};
   return (
     <View>
       {/* 3 dots button */}
@@ -72,6 +86,7 @@ const Navbar = ({ isOpen, toggleDrawer, handleNavigate }) => {
           <Icon_button icon="settings" text="Settings" handleFunction={Navigate_to_Settings} />
           <Icon_button icon="notifications" text="Notifications" handleFunction={Navigate_to_Notifications} />
           <Icon_button icon="analytics" text="Insights" handleFunction={Navigate_to_Insights} />
+          <Icon_button icon="log-out" text="Logout" handleFunction={Navigate_to_Login} />
         </MotiView>
       </Modal>
     </View>

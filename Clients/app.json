@@ -1,17 +1,21 @@
 {
   "expo": {
     "name": "Tracking App",
-    "slug": "Clients",
+    "slug": "task-manager",
+    "owner": "nimra_naseer106",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Logo.png",
-    "scheme": "clients",
+    "scheme": "com.codesoftz.taskmanager",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.codesoftz.taskmanager"
     },
     "android": {
+      "package": "com.codesoftz.taskmanager",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -33,10 +37,17 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "66f49313-bb00-4193-bdbc-3c3aab28e55e"
+      }
     }
   }
 }

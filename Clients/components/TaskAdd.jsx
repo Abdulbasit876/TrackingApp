@@ -7,33 +7,50 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Alert, // 👈 import Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import HeaderWithBack from "./HeaderWithBack";
 
 export default function TaskForm({
   initialTitle = "",
   initialDescription = "",
   initialPriority = "High",
-  mode = "add", // "add" or "update"
-  onSubmit, // function jab save/update button dabaye
+  initialDeadline = null,
+  mode = "add",
+  onSubmit,
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [priority, setPriority] = useState(initialPriority);
   const [showDropdown, setShowDropdown] = useState(false);
-
+  const [deadline, setDeadline] = useState(initialDeadline);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const priorities = ["High", "Medium", "Low"];
 
-  // agar props change ho to state update ho jaye
   useEffect(() => {
     setTitle(initialTitle);
     setDescription(initialDescription);
     setPriority(initialPriority);
-  }, [initialTitle, initialDescription, initialPriority]);
+    setDeadline(initialDeadline);
+  }, [initialTitle, initialDescription, initialPriority, initialDeadline]);
 
   const handleSubmit = () => {
+    if (!title.trim()) {
+      Alert.alert("Validation Error", "Title is required!");
+      return;
+    }
+    if (!priority) {
+      Alert.alert("Validation Error", "Priority is required!");
+      return;
+    }
+    if (!deadline) {
+      Alert.alert("Validation Error", "Deadline is required!");
+      return;
+    }
     if (onSubmit) {
-      onSubmit({ title, description, priority });
+      onSubmit({ title, description, priority, deadline });
     }
   };
 
@@ -48,8 +65,7 @@ export default function TaskForm({
         keyboardShouldPersistTaps="handled"
       >
         <View className="flex-1 px-5 pt-14">
-          {/* Header */}
-          <Text className="text-light mt-14 text-4xl font-popinMedium mb-5">
+          <Text className="text-light mt-16 text-4xl font-popinMedium mb-5">
             {mode === "add" ? "Add Task" : "Update Task"}
           </Text>
 
@@ -58,7 +74,7 @@ export default function TaskForm({
             <TextInput
               value={title}
               onChangeText={setTitle}
-              placeholder="Title"
+              placeholder="Title *"
               placeholderTextColor="#aaa"
               className="text-light font-bold text-base mb-2"
             />
@@ -82,7 +98,7 @@ export default function TaskForm({
             onPress={() => setShowDropdown(!showDropdown)}
             className="bg-dark mt-8 border border-primary rounded-2xl p-5 mb-4 flex-row justify-between items-center"
           >
-            <Text className="text-light">Priority</Text>
+            <Text className="text-light">Priority *</Text>
             <View className="flex-row items-center">
               <Text className="text-light mr-2">{priority}</Text>
               <Ionicons
@@ -93,7 +109,6 @@ export default function TaskForm({
             </View>
           </TouchableOpacity>
 
-          {/* Dropdown */}
           {showDropdown && (
             <View className="bg-dark border border-primary rounded-2xl mb-4">
               {priorities.map((item, index) => (
@@ -117,20 +132,42 @@ export default function TaskForm({
             </View>
           )}
 
-          {/* Deadline (static for now) */}
-          <View className="bg-dark border mt-4 border-primary rounded-2xl p-5 mb-6 flex-row justify-between items-center">
-            <Text className="text-light">Deadline</Text>
-            <Text className="text-light">May 25, 2024</Text>
-          </View>
-        </View>
+          {/* Deadline */}
+          <TouchableOpacity
+            onPress={() => setDatePickerVisibility(true)}
+            className="bg-dark border mt-4 border-primary rounded-2xl p-5 mb-6 flex-row justify-between items-center"
+          >
+            <Text className="text-light">Deadline *</Text>
+            <Text className="text-light">
+              {deadline ? deadline.toLocaleString() : "Select Date & Time"}
+            </Text>
+          </TouchableOpacity>
 
-        {/* Save/Update Button */}
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="datetime"
+            onConfirm={(date) => {
+              setDeadline(date);
+              setDatePickerVisibility(false);
+            }}
+            onCancel={() => setDatePickerVisibility(false)}
+          />
+        </View>
+        
         <TouchableOpacity
           onPress={handleSubmit}
-          className="bg-secondary p-6 rounded-2xl items-center absolute bottom-14 left-5 right-5"
+          className="bg-secondary p-6 rounded-2xl items-center absolute bottom-40 left-5 right-5"
         >
           <Text className="text-light font-semibold">
             {mode === "add" ? "Save" : "Update"}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={()=>{router.back()}}
+          className="bg-green p-6 rounded-2xl items-center absolute bottom-14 left-5 right-5"
+        >
+          <Text className="text-light font-semibold">
+           cencel
           </Text>
         </TouchableOpacity>
       </ScrollView>

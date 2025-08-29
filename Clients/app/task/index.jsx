@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import Barcard from "@/components/Barcard";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "expo-router";
+import { auth } from "../../config/firebase";
 import Icon_button from "../../components/Icon_button";
+
 const tasks = [
   { id: "1", title: "Update website", color: "bg-danger", date: "Today", priority: "High" },
   { id: "2", title: "Client presentation", color: "bg-orange", date: "Jun 6", priority: "Medium" },
@@ -14,10 +16,20 @@ const tasks = [
   { id: "5", title: "Book flights", color: "bg-orange", date: "Jun 7", priority: "Medium" },
   { id: "6", title: "Buy groceries", color: "bg-green", date: "Today", priority: "Low" },
 ];
+
 export default function TaskListScreen() {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState("All"); // All | High | Medium | Low
   const router = useRouter();
+ useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user==null) {
+        router.replace("/Login");
+      }
+    });
+    return unsubscribe;
+ }, []);
+
 
   const toggleDrawer = () => setIsOpen((prev) => !prev);
   const handleNavigate = (path) => {
@@ -67,15 +79,14 @@ export default function TaskListScreen() {
           <Text className="text-white text-2xl font-popinMedium mb-3">
             {filter === "All" ? "All Tasks" : `${filter} Tasks`}
           </Text>
-        {filter !== "All" && (
-  <Icon_button
-    text="All"
-    icon="reader"
-    icon_size={20}
-    handleFunction={() => setFilter("All")}
-  />
-)}
-
+          {filter !== "All" && (
+            <Icon_button
+              text="All"
+              icon="reader"
+              icon_size={20}
+              handleFunction={() => setFilter("All")}
+            />
+          )}
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -85,7 +96,7 @@ export default function TaskListScreen() {
             <TouchableOpacity
               onPress={() => {
                 setIsOpen(false);
-                router.push("/task/taskDetail");
+                router.push(`/taskDetail/${item.id}`);
               }}
               className="flex-row items-center justify-between bg-black/30 p-4 mb-3 rounded-2xl"
             >

@@ -1,9 +1,8 @@
-import { Stack} from "expo-router";
+import { Stack } from "expo-router";
 import 'react-native-reanimated';
 import '../global.css';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
-
 export default function Layout() {
   const [fontsLoaded] = useFonts({
     popinLight: require('../assets/fonts/Poppins-Light.ttf'),
@@ -30,18 +29,19 @@ export default function Layout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack initialRouteName="splash">
-        <Stack.Screen name="task/index" options={{headerShown:false}} />
-        <Stack.Screen name="splash" options={{ headerShown: false }} />
-        <Stack.Screen name="Login" options={{ headerShown: false }} />
-        <Stack.Screen name="signup" options={{ headerShown: false }} />
-        <Stack.Screen name="settings" options={{ headerShown: false }} />
-        <Stack.Screen name="notification" options={{ headerShown: false }} />
-        <Stack.Screen name="insights" options={{ headerShown: false }} />
-        <Stack.Screen name="addtask" options={{ headerShown: false }} />
-        <Stack.Screen name="task/taskDetail" options={{ headerShown: false }} />
-        <Stack.Screen name="update/[id]" options={{ headerShown: false }} />
-      </Stack>
+        <Stack initialRouteName="splash">
+          <Stack.Screen name="task/index" options={{headerShown:false}} />
+          <Stack.Screen name="splash" options={{ headerShown: false }} />
+          <Stack.Screen name="Login" options={{ headerShown: false }} />
+          <Stack.Screen name="signup" options={{ headerShown: false }} />
+          <Stack.Screen name="settings" options={{ headerShown: false }} />
+          <Stack.Screen name="notification" options={{ headerShown: false }} />
+          <Stack.Screen name="insights" options={{ headerShown: false }} />
+          <Stack.Screen name="addtask" options={{ headerShown: false }} />
+          <Stack.Screen name="taskDetail/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="update/[id]" options={{ headerShown: false }} />
+        </Stack>
+      
     </GestureHandlerRootView>
   );
 }

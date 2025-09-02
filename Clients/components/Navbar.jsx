@@ -28,8 +28,9 @@ const Navbar = ({ isOpen, toggleDrawer, handleNavigate }) => {
   };
     const Navigate_to_Login = async () => {
   try {
-    await AsyncStorage.removeItem("user");
-    await signOut(auth);
+ 
+  await signOut(auth);
+   await AsyncStorage.removeItem("user");
     handleNavigate("/Login");
 
     console.log("Logout successful!");

@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -6,28 +5,57 @@ import {
   SafeAreaView,
   StatusBar,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { MotiView } from "moti";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import HeaderWithBack from "../../components/HeaderWithBack";
-
-const tasks = [
-  { id: "1", title: "Update website", color: "bg-danger", date: "Today", priority: "High", description: "Update the landing page and fix hero section" },
-  { id: "2", title: "Client presentation", color: "bg-orange", date: "Jun 6", priority: "Medium", description: "Prepare slides and demo for the client" },
-  { id: "3", title: "Plan budget", color: "bg-green", date: "Tomorrow", priority: "Low", description: "Work on budget estimates for next quarter" },
-  { id: "4", title: "Call Alex", color: "bg-danger", date: "Jun 4", priority: "High", description: "Discuss partnership terms" },
-  { id: "5", title: "Book flights", color: "bg-orange", date: "Jun 7", priority: "Medium", description: "Book flights for conference" },
-  { id: "6", title: "Buy groceries", color: "bg-green", date: "Today", priority: "Low", description: "Milk, Bread, Eggs, Vegetables" },
-];
+import {
+  completeTask,
+  deleteTask,
+  getTaskById,
+} from "../../services/Task_Services";
+import { useEffect, useState } from "react";
 
 export default function TaskDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
-  // find task from dummy array
-  const task = tasks.find((t) => t.id === id);
+  const [task, setTask] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [btnLoading, setBtnLoading] = useState({
+    complete: false,
+    update: false,
+    delete: false,
+  });
 
-  // If no task found (id invalid), show a friendly message and back button
+  // 🔹 Fetch task from Firebase
+  const fetchTask = async () => {
+    try {
+      setLoading(true);
+      const fetchedTask = await getTaskById(id);
+      setTask(fetchedTask);
+    } catch (error) {
+      console.error("Error fetching task:", error);
+      setTask(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTask();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 bg-dark items-center justify-center px-6">
+        <StatusBar barStyle="light-content" />
+        <ActivityIndicator size="large" color="#fff" />
+      </SafeAreaView>
+    );
+  }
+
   if (!task) {
     return (
       <SafeAreaView className="flex-1 bg-dark items-center justify-center px-6">
@@ -43,16 +71,33 @@ export default function TaskDetailScreen() {
     );
   }
 
-  const handleComplete = () => {
-    // currently just navigate back to list; later add real logic
-    router.push("/task");
+  // 🔹 Handlers with loader
+  const handleComplete = async () => {
+    try {
+      setBtnLoading((prev) => ({ ...prev, complete: true }));
+      await completeTask(id); // marks task completed in Firebase
+      await fetchTask(); // refresh local task data
+    } catch (error) {
+      console.error("Error completing task:", error);
+    } finally {
+      setBtnLoading((prev) => ({ ...prev, complete: false }));
+    }
   };
+
   const handleUpdate = () => {
     router.push(`/update/${id}`);
   };
-  const handleDelete = () => {
-    // currently just navigate back to list; later add delete logic
-    router.push("/task");
+
+  const handleDelete = async () => {
+    try {
+      setBtnLoading((prev) => ({ ...prev, delete: true }));
+      await deleteTask(id);
+      router.push("/task"); // redirect after delete
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    } finally {
+      setBtnLoading((prev) => ({ ...prev, delete: false }));
+    }
   };
 
   return (
@@ -63,13 +108,16 @@ export default function TaskDetailScreen() {
 
         <Text
           className="text-white text-4xl mb-2 font-popinMedium"
-          style={{ lineHeight: 42, includeFontPadding: false, textAlignVertical: "center" }}
+          style={{
+            lineHeight: 42,
+            includeFontPadding: false,
+            textAlignVertical: "center",
+          }}
         >
           {task.title}
         </Text>
 
         <View className="mt-7">
-          {/* Description */}
           <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
             Description
           </Text>
@@ -77,7 +125,6 @@ export default function TaskDetailScreen() {
             {task.description ?? "No description"}
           </Text>
 
-          {/* Priority */}
           <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
             Priority
           </Text>
@@ -85,22 +132,23 @@ export default function TaskDetailScreen() {
             {task.priority}
           </Text>
 
-          {/* Due Date */}
           <Text className="text-[#8b5cf6] text-xl upercase font-popinMedium">
             Due Date
           </Text>
           <Text className="text-[#d4d4d4] text-lg font-popinRegular mb-6">
-            {task.date}
+            {task.deadline
+              ? task.deadline.toDate
+                ? task.deadline.toDate().toLocaleDateString()
+                : new Date(task.deadline).toLocaleDateString()
+              : "No deadline"}
           </Text>
         </View>
 
-        {/* Spacer */}
         <View className="flex-1" />
-
-        {/* Buttons group */}
         <View className={Platform.OS === "ios" ? "pb-[18px]" : "pb-[34px]"}>
+
           <View className="flex-row justify-between mb-3">
-            {/* Completed */}
+            {/* Complete */}
             <MotiView
               from={{ opacity: 0, translateY: 18 }}
               animate={{ opacity: 1, translateY: 0 }}
@@ -110,11 +158,18 @@ export default function TaskDetailScreen() {
               <TouchableOpacity
                 onPress={handleComplete}
                 activeOpacity={0.85}
-                className="bg-[#008660] py-3 rounded-xl items-center"
+                className={`py-3 rounded-xl items-center flex-row justify-center ${
+                  task.isCompleted ? "bg-gray-500" : "bg-[#008660]"
+                }`}
+                disabled={task.isCompleted || btnLoading.complete}
               >
-                <Text className="text-white font-popinRegular text-base">
-                  Completed
-                </Text>
+                {btnLoading.complete ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text className="text-white font-popinRegular text-base">
+                    {task.isCompleted ? "Completed" : "Complete"}
+                  </Text>
+                )}
               </TouchableOpacity>
             </MotiView>
 
@@ -128,9 +183,18 @@ export default function TaskDetailScreen() {
               <TouchableOpacity
                 onPress={handleUpdate}
                 activeOpacity={0.85}
-                className="bg-[#6f57d8] py-3 rounded-xl items-center"
+                className={`py-3 rounded-xl items-center flex-row justify-center ${
+                  task.isCompleted ? "bg-gray-500" : "bg-[#6f57d8]"
+                }`} // ✅ color gray if completed
+                disabled={btnLoading.update || task.isCompleted} // ✅ disable if completed
               >
-                <Text className="text-white font-popinRegular text-base">Update</Text>
+                {btnLoading.update ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text className="text-white font-popinRegular text-base">
+                    Update
+                  </Text>
+                )}
               </TouchableOpacity>
             </MotiView>
 
@@ -144,9 +208,16 @@ export default function TaskDetailScreen() {
               <TouchableOpacity
                 onPress={handleDelete}
                 activeOpacity={0.85}
-                className="bg-[#fb923c] py-3 rounded-xl items-center"
+                className="bg-[#fb923c] py-3 rounded-xl items-center flex-row justify-center"
+                disabled={btnLoading.delete}
               >
-                <Text className="text-white font-popinRegular text-base">Delete</Text>
+                {btnLoading.delete ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text className="text-white font-popinRegular text-base">
+                    Delete
+                  </Text>
+                )}
               </TouchableOpacity>
             </MotiView>
           </View>
@@ -162,7 +233,9 @@ export default function TaskDetailScreen() {
               activeOpacity={0.85}
               className="bg-primary py-4 rounded-xl items-center"
             >
-              <Text className="text-white font-popinRegular text-lg">Cancel</Text>
+              <Text className="text-white font-popinRegular text-lg">
+                Cancel
+              </Text>
             </TouchableOpacity>
           </MotiView>
         </View>

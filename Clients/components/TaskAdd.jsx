@@ -7,11 +7,12 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  Alert, // 👈 import Alert
+  ActivityIndicator,
+  Keyboard 
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import HeaderWithBack from "./HeaderWithBack";
+import { useRouter } from "expo-router";
 
 export default function TaskForm({
   initialTitle = "",
@@ -20,6 +21,7 @@ export default function TaskForm({
   initialDeadline = null,
   mode = "add",
   onSubmit,
+  onCencel,
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
@@ -27,6 +29,9 @@ export default function TaskForm({
   const [showDropdown, setShowDropdown] = useState(false);
   const [deadline, setDeadline] = useState(initialDeadline);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
   const priorities = ["High", "Medium", "Low"];
 
   useEffect(() => {
@@ -36,21 +41,22 @@ export default function TaskForm({
     setDeadline(initialDeadline);
   }, [initialTitle, initialDescription, initialPriority, initialDeadline]);
 
-  const handleSubmit = () => {
-    if (!title.trim()) {
-      Alert.alert("Validation Error", "Title is required!");
-      return;
-    }
-    if (!priority) {
-      Alert.alert("Validation Error", "Priority is required!");
-      return;
-    }
-    if (!deadline) {
-      Alert.alert("Validation Error", "Deadline is required!");
-      return;
-    }
-    if (onSubmit) {
-      onSubmit({ title, description, priority, deadline });
+  // 👇 Validation check
+  const isFormValid = title.trim() && priority && deadline;
+
+  const handleSubmit = async () => {
+    if (!isFormValid || loading) return; // safety
+    try {
+      setLoading(true);
+      if (onSubmit) {
+        await onSubmit({ title, description, priority, deadline });
+      }
+      // ✅ Redirect after success
+      router.replace("/task");
+    } catch (err) {
+      console.error("Error saving task:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,9 +99,11 @@ export default function TaskForm({
             />
           </View>
 
-          {/* Priority */}
           <TouchableOpacity
-            onPress={() => setShowDropdown(!showDropdown)}
+            onPress={() => {
+            setShowDropdown(!showDropdown)
+            Keyboard.dismiss();
+            }}
             className="bg-dark mt-8 border border-primary rounded-2xl p-5 mb-4 flex-row justify-between items-center"
           >
             <Text className="text-light">Priority *</Text>
@@ -146,6 +154,7 @@ export default function TaskForm({
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="datetime"
+            minimumDate={new Date()}
             onConfirm={(date) => {
               setDeadline(date);
               setDatePickerVisibility(false);
@@ -153,22 +162,29 @@ export default function TaskForm({
             onCancel={() => setDatePickerVisibility(false)}
           />
         </View>
-        
+
+        {/* Save/Update Button */}
         <TouchableOpacity
           onPress={handleSubmit}
-          className="bg-secondary p-6 rounded-2xl items-center absolute bottom-40 left-5 right-5"
+          disabled={!isFormValid || loading}
+          className={`p-6 rounded-2xl items-center absolute bottom-40 left-5 right-5 ${
+            isFormValid && !loading ? "bg-secondary" : "bg-gray-500"
+          }`}
         >
-          <Text className="text-light font-semibold">
-            {mode === "add" ? "Save" : "Update"}
-          </Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text className="text-light font-semibold">
+              {mode === "add" ? "Save" : "Update"}
+            </Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={()=>{router.back()}}
-          className="bg-green p-6 rounded-2xl items-center absolute bottom-14 left-5 right-5"
+          onPress={onCencel}
+          disabled={loading}
+          className="bg-primary p-6 rounded-2xl items-center absolute bottom-14 left-5 right-5"
         >
-          <Text className="text-light font-semibold">
-           cencel
-          </Text>
+          <Text className="text-light font-semibold">Cancel</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>

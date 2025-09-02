@@ -30,12 +30,10 @@ export default function SettingsScreen() {
                 </Text>
                 <Switch_cards title="Dark Mode" />
                 <Switch_cards title="Cloud Backup" />
-                <Switch_cards title="Notification" />
+                <Switch_cards title="Notification" storageKey="notificationsEnabled"/>
                 <View className="bg-primary p-4 rounded-2xl mb-4">
                     <Text className="text-white font-popinMedium text-[18px] mb-3">Export Data</Text>
                     <View className="flex-row justify-between">
-
-                        {/* PDF Button */}
                         <TouchableOpacity
                             className={`flex-1 px-4 py-2 rounded-xl mr-2 ${exportType === "PDF" ? "bg-secondary" : "bg-dark"
                                 }`}
@@ -44,7 +42,6 @@ export default function SettingsScreen() {
                             <Text className="text-white font-popinMedium text-center">PDF</Text>
                         </TouchableOpacity>
 
-                        {/* CSV Button */}
                         <TouchableOpacity
                             className={`flex-1 px-4 py-2 rounded-xl ml-2 ${exportType === "CSV" ? "bg-secondary" : "bg-dark"
                                 }`}

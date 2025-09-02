@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Animated } from "react-native";
 import { View } from "react-native";
 
 export default function CustomToggle({ value, onChange }) {
   const [animValue] = useState(new Animated.Value(value ? 1 : 0));
+
+  // Add this effect to sync animValue with value prop changes
+  useEffect(() => {
+    Animated.timing(animValue, {
+      toValue: value ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [value]);
 
   const toggleSwitch = () => {
     const newValue = !value;
